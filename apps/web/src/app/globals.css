@@ -1,0 +1,220 @@
+@import "tailwindcss";
+
+/*
+ * HVAC Studio design tokens.
+ * Cool engineering paper + slate ink, one accent ("duct teal"), and two semantic
+ * thermal colors reused by every module: heat (heating loads, supply warm) and
+ * cool (cooling loads, return/cold). Plan colors are separate so the drawing
+ * reads like a drawing, not like UI chrome.
+ */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  --bg: #f5f7f8;
+  --surface: #ffffff;
+  --surface-2: #f0f3f5;
+  --surface-3: #e7ecef;
+  --line: #dde3e8;
+  --line-strong: #c6cfd6;
+  --ink: #12202b;
+  --ink-2: #44535f;
+  --ink-3: #6f7c87;
+  --ink-4: #9aa5ae;
+  --accent: #0b7a83;
+  --accent-hover: #09666e;
+  --accent-soft: #e3f2f3;
+  --accent-ink: #075a61;
+  --on-accent: #ffffff;
+  --heat: #c4462a;
+  --heat-soft: #fbebe6;
+  --cool: #2b6cd4;
+  --cool-soft: #e7effc;
+  --ok: #2f8a4c;
+  --ok-soft: #e5f3ea;
+  --warn: #b7791f;
+  --warn-soft: #fbf1df;
+  --danger: #c53030;
+  --danger-soft: #fbe9e9;
+  --focus: #0b7a83;
+  --shadow-sm: 0 1px 2px rgb(18 32 43 / 0.06);
+  --shadow-md: 0 1px 2px rgb(18 32 43 / 0.05), 0 6px 20px -6px rgb(18 32 43 / 0.14);
+  --shadow-lg: 0 2px 6px rgb(18 32 43 / 0.06), 0 24px 48px -12px rgb(18 32 43 / 0.24);
+
+  /* Plan (canvas) palette */
+  --plan-bg: #fbfcfc;
+  --plan-grid-minor: #eef1f3;
+  --plan-grid-major: #dce2e6;
+  --plan-wall: #1d2b36;
+  --plan-wall-interior: #4b5964;
+  --plan-room: #0b7a83;
+  --plan-select: #0b7a83;
+  --plan-dim: #44535f;
+  --plan-window: #2b6cd4;
+  --plan-door: #8a5a2b;
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #0e151b;
+  --surface: #141d24;
+  --surface-2: #19232b;
+  --surface-3: #212d36;
+  --line: #26323c;
+  --line-strong: #34424d;
+  --ink: #e6ecf0;
+  --ink-2: #b2bec7;
+  --ink-3: #85939e;
+  --ink-4: #5d6b76;
+  --accent: #2fb3bd;
+  --accent-hover: #4cc3cc;
+  --accent-soft: #11343a;
+  --accent-ink: #7fd6dd;
+  --on-accent: #06272a;
+  --heat: #f07a5c;
+  --heat-soft: #3a1d16;
+  --cool: #6b9cf0;
+  --cool-soft: #17253d;
+  --ok: #57c27a;
+  --ok-soft: #142d1d;
+  --warn: #e0a84a;
+  --warn-soft: #33270f;
+  --danger: #f06b6b;
+  --danger-soft: #3a1717;
+  --focus: #2fb3bd;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -8px rgb(0 0 0 / 0.6);
+  --shadow-lg: 0 2px 6px rgb(0 0 0 / 0.4), 0 24px 48px -12px rgb(0 0 0 / 0.7);
+
+  --plan-bg: #10181e;
+  --plan-grid-minor: #172128;
+  --plan-grid-major: #213039;
+  --plan-wall: #d9e2e8;
+  --plan-wall-interior: #9fb0bb;
+  --plan-room: #2fb3bd;
+  --plan-select: #2fb3bd;
+  --plan-dim: #b2bec7;
+  --plan-window: #6b9cf0;
+  --plan-door: #d9a066;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-ink-4: var(--ink-4);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+  --color-on-accent: var(--on-accent);
+  --color-heat: var(--heat);
+  --color-heat-soft: var(--heat-soft);
+  --color-cool: var(--cool);
+  --color-cool-soft: var(--cool-soft);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --radius-sm: 5px;
+  --radius-md: 7px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+}
+
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+  html {
+    font-feature-settings: "cv11", "ss01", "ss03";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+@layer utilities {
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+  .blueprint-grid {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+      linear-gradient(to right, rgb(255 255 255 / 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.03) 1px, transparent 1px);
+    background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes hv-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes hv-pop-in {
+  from { opacity: 0; transform: translateY(4px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes hv-dialog-in {
+  from { opacity: 0; transform: translate(-50%, calc(-50% + 6px)) scale(0.98); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+@keyframes hv-shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.animate-fade-in { animation: hv-fade-in 140ms ease-out; }
+.animate-pop-in { animation: hv-pop-in 140ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.animate-dialog-in { animation: hv-dialog-in 160ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-2) 0, var(--surface-3) 40%, var(--surface-2) 80%);
+  background-size: 800px 100%;
+  animation: hv-shimmer 1.4s linear infinite;
+}
