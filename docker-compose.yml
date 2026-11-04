@@ -31,18 +31,16 @@ services:
 
   api:
     build:
-      context: ./apps/api
-      dockerfile: ../../infrastructure/docker/api.Dockerfile
+      context: .
+      dockerfile: infrastructure/docker/api.Dockerfile
     env_file:
       - path: ./apps/api/.env
         required: false
     environment:
       DATABASE_URL: postgresql+psycopg://postgres:${POSTGRES_PASSWORD:-postgres}@db:5432/hvac_studio
-      SAMPLE_HOUSE_PATH: /fixtures/sample-house.json
       STORAGE_DIR: /app/storage
     volumes:
       - uploads:/app/storage
-      - ./packages/shared-types/fixtures:/fixtures:ro
     ports: ["8000:8000"]
     depends_on:
       db: { condition: service_healthy }
