@@ -10,7 +10,9 @@ from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 API_ROOT = Path(__file__).resolve().parents[2]  # apps/api
-REPO_ROOT = API_ROOT.parents[1]
+# .parent.parent, not .parents[1]: in the Docker image API_ROOT is /app, which has no second parent
+# (parents[1] raises IndexError at import). The image sets SAMPLE_HOUSE_PATH, so this default is unused there.
+REPO_ROOT = API_ROOT.parent.parent
 
 DEV_SECRET_KEY = "dev-insecure-secret-change-me-0123456789abcdef"
 LOCAL_ENVIRONMENTS = {"development", "dev", "local", "test"}
@@ -44,6 +46,16 @@ class Settings(BaseSettings):
 
     cors_origins: list[str] = Field(default_factory=list)
     log_level: str = "INFO"
+
+    @field_validator("database_url", mode="after")
+    @classmethod
+    def _psycopg_driver(cls, v: str) -> str:
+        """Hosted Postgres (Render, Heroku, …) hands out postgres:// or postgresql:// URLs, which SQLAlchemy
+        maps to psycopg2 (not installed). Pin the psycopg 3 driver; explicit drivers are left untouched."""
+        for scheme in ("postgres://", "postgresql://"):
+            if v.startswith(scheme):
+                return "postgresql+psycopg://" + v[len(scheme) :]
+        return v
 
     @field_validator("secret_key", mode="before")
     @classmethod

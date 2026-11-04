@@ -54,3 +54,27 @@ jobs:
       - run: ruff check .
       - run: alembic upgrade head
       - run: pytest -q
+
+  api-image:
+    name: API Docker image (build + boot, as deployed on Render)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: hvac_studio
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -f infrastructure/docker/api.Dockerfile -t hvac-api .
+      # Render-style env: plain postgresql:// URL, injected $PORT, production mode.
+      - run: |
+          docker run -d --name api --network host -e PORT=10000 -e ENVIRONMENT=production \
+            -e SECRET_KEY=ci-only-secret-not-for-production-0123456789 \
+            -e DATABASE_URL=postgresql://postgres:postgres@localhost:5432/hvac_studio hvac-api
+          for i in $(seq 1 30); do curl -sf http://localhost:10000/api/v1/health && exit 0; sleep 2; done
+          docker logs api; exit 1

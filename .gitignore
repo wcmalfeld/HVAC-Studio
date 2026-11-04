@@ -12,6 +12,7 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
+*.egg-info/
 apps/api/storage/
 playwright-report/
 test-results/

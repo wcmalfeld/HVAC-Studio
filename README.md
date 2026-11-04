@@ -46,6 +46,9 @@ pnpm --filter @hvac/web dev           # http://localhost:3000
 
 Or with Docker: `docker compose up` (Postgres, Redis, API; see `docker-compose.yml`).
 
+## Deployment
+Web on Vercel, API + Postgres on Render (`render.yaml`). Step-by-step: [`docs/deployment.md`](docs/deployment.md).
+
 ## Tests
 ```bash
 pnpm --filter @hvac/building-geometry test   # geometry engine (vitest)
